@@ -1,8 +1,43 @@
-import { useState } from "react";
+import { useState , useEffect} from "react";
 import { CORE_CONCEPTS, EXAMPLES } from "./data";
 import Header from "./components/Header/Header.jsx";
 import CoreConcept from "./components/CoreConcept/CoreConcept.jsx";
 import TabButton from "./components/TabButton/TabButton.jsx";
+
+
+
+
+function Clock() {
+  const [seconds, setSeconds] = useState(0);
+  const [minutes, setMinutes] = useState(0);
+  const [hours, setHours] = useState(0);
+
+  useEffect(() => {
+    const key = setInterval(() => {
+      if(seconds===59){
+        setSeconds(0)
+        setMinutes(minutes + 1)
+        if(minutes===59){
+          setHours(hours + 1)
+          setMinutes(0)
+          setSeconds(0)
+        }
+      }else{
+        setSeconds((seconds) => seconds + 1)
+      }
+      
+    }, 1000);
+    console.log(seconds)
+
+    return () => {
+      clearInterval(key)
+    }
+  },[seconds , minutes , hours])
+
+  return (
+    <p>{hours}:{minutes}:{seconds} seconds have passed.</p>
+  );
+}
 
 function App() {
   const [curr, setCurr] = useState();
@@ -27,6 +62,7 @@ function App() {
 
   return (
     <div>
+      <Clock />
       <Header />
       <main>
         <section id="core-concepts">
